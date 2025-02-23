@@ -19,6 +19,8 @@ We can filter the JSON feed to only show Yankees games.
  cat dbacks.json | jq '.[] | select(.teamcode == "NYY")'
 ```
 
+[Learn more about jq](https://jqlang.org/).
+
 ### RESULT
 
 We see that there are 3 away games in April.
