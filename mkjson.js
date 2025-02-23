@@ -53,23 +53,23 @@ fs.readFile('dbacks.csv','utf8', (err,data) => {
     opendt = new Date('2025-03-27T00:00:00-0700')
     versus = a[3].replace(' at ','')
       .replace(team, '').trim()
-    home = !!a[3].indexOf(team);
+    isHomeGame = !!a[3].indexOf(team);
     schedule.push({
-      openingdayts: +opendt,
-      openingdayiso: opendt,
-      openingday: opendt.toLocaleDateString('fr-CA'),
+      date: dt.toLocaleDateString('fr-CA'),
       datets: +dt,
       dateiso: dt,
-      date: dt.toLocaleDateString('fr-CA'),
-      firstpitchts: +fp,
-      firstpitchiso: fp,
       firstpitch: fp.toLocaleTimeString('en-US',{
         timeStyle: 'short',
         timeZone: 'America/Phoenix'
       }),
+      firstpitchts: +fp,
+      firstpitchiso: fp,
       team: versus,
       teamcode: teamcodes.get(versus),
-      homegame: home,
+      homegame: isHomeGame,
+      openingdayts: +opendt,
+      openingdayiso: opendt,
+      openingday: opendt.toLocaleDateString('fr-CA'),
     }) // push
   }) // foreach
 
