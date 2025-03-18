@@ -10,8 +10,21 @@ const fs = require('fs');
 // place the team codes in a Map for easy access
 const teamcodes = new Map();
 fs.readFileSync('teams.csv', 'utf8')
-  .trim().split(/\n/).map((a)=>a.split(',')).forEach((a)=>{
+  .trim()
+  .split(/\n/)
+  .map((a)=>a.split(','))
+  .forEach((a)=>{
     teamcodes.set(a[1],a[0]);
+  });
+
+const divisions = new Map();
+fs.readFileSync('divisions.csv', 'utf8')
+  .trim()
+  .toUpperCase()
+  .split(/\n/)
+  .map((a)=>a.split(','))
+  .forEach((a)=> {
+    divisions.set(a[0],a[1]);
   });
 
 // convert the CSV into a JSON feed
@@ -52,8 +65,25 @@ fs.readFile('dbacks.csv','utf8', (err,data) => {
     fp = new Date(`${a[0]} ${hms} -0700`)
     opendt = new Date('2025-03-27T00:00:00-0700')
     versus = a[3].replace(' at ','')
-      .replace(team, '').trim()
+      .replace(team, '').trim();
+
+    // is this a home game??
     isHomeGame = !!a[3].indexOf(team);
+
+    // division play
+    hd = divisions.get(teamcodes.get(team))
+    vd = divisions.get(teamcodes.get(versus))
+
+    // are these two teams in the same division?
+    isSameDivision = (hd === vd)
+
+    // interleague play
+    hl = hd.substring(0,2);
+    vl = vd.substring(0,2);
+
+    // are these these two teams in the same league?
+    isSameLeague = (hl === vl)
+
     schedule.push({
       date: dt.toLocaleDateString('fr-CA'),
       datets: +dt,
@@ -70,6 +100,8 @@ fs.readFile('dbacks.csv','utf8', (err,data) => {
       openingdayts: +opendt,
       openingdayiso: opendt,
       openingday: opendt.toLocaleDateString('fr-CA'),
+      isSameLeague: isSameLeague,
+      isSameDivision: isSameDivision,
     }) // push
   }) // foreach
 

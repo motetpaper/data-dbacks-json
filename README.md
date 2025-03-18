@@ -70,6 +70,18 @@ We see that there are 3 away games in April.
 }
 ```
 
+### EXAMPLE: INTERLEAGUE PLAY
+
+This query returns all the games, where the Diamondbacks face interleague play.
+```bash
+cat dbacks.json | jq '.[] | select(.isSameLeague == false)'
+```
+
+This query returns only the division games (i.e., the NL West)for the Diamondbacks.
+```bash
+cat dbacks.json | jq '.[] | select(.isSameDivision == true)'
+```
+
 # FIELDS
 
 More fields will be added to the JSON feed. For now, here is the starting lineup.
@@ -92,4 +104,8 @@ More fields will be added to the JSON feed. For now, here is the starting lineup
   },
 ```
 
+## DEVELOPER NOTES
 
+  + The `dbacks.csv` is from the official Arizona Diamondback web site.
+
+  + The main workflow is `mkjson.js`, where the `teams.csv` is used as the dataset providing the 30 MLB teams and their abbreviations.
